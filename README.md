@@ -1,8 +1,3 @@
-# unsplutter
+# Unsplutter
 
-Simple Unsplash client app
-
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+Simple Unsplash client app using [Flutter](https://flutter.io/). (for practicing)
