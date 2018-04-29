@@ -1,0 +1,28 @@
+local_variables.dart
+
+# Android Studio
+.generated/
+.idea/
+.navigation/
+build/
+*/build/
+*.iml
+
+# Built APK files
+*.apk
+*.ap_
+
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.packages
+.pub/
+GeneratedPluginRegistrant.java
+
+# Gradle
+.gradle/
+gradle.properties
+local.properties
+
+# macOS
+.DS_Store

@@ -1,0 +1,22 @@
+name: unsplutter
+description: Simple Unsplash client app using Flutter.
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl:
+  intl_translation:
+  cupertino_icons: 0.1.0
+  transparent_image: 0.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - res/localization/en.json
+    - res/localization/ja.json
