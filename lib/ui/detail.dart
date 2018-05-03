@@ -30,9 +30,12 @@ class DetailWidget extends StatelessWidget {
               ),
             ),
           ),
-          new SliverList(
-            delegate: new SliverChildListDelegate(createListContent(context)),
-          )
+          new SliverSafeArea(
+            top: false,
+            sliver: new SliverList(
+              delegate: new SliverChildListDelegate(createListContent(context)),
+            ),
+          ),
         ],
       ),
     );
