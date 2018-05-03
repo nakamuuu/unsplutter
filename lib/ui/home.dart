@@ -15,6 +15,7 @@ class HomeState extends State<HomeWidget> {
   Widget build(BuildContext context) => new Scaffold(
         appBar: new AppBar(
           title: new Text(UnsplutterLocalizations.of(context).trans('app_name')),
+          backgroundColor: Colors.grey.shade900,
         ),
         body: new FutureBuilder<List<Photo>>(
           future: UnsplashApi().getPhotos(),
