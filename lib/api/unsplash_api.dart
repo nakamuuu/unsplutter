@@ -10,9 +10,9 @@ class UnsplashApi {
   static const headers = {'Authorization': "Client-ID ${LocalVariables.unsplashAccessKey}"};
 
   Future<List<Photo>> getPhotos({perPage: 30}) async {
-    var response = await http.read("$baseUrl/photos?per_page=$perPage", headers: headers);
-    List<Photo> photos = [];
-    for (var json in json.decode(response)) {
+    final response = await http.get("$baseUrl/photos?per_page=$perPage", headers: headers);
+    final List<Photo> photos = [];
+    for (var json in json.decode(utf8.decode(response.bodyBytes))) {
       photos.add(Photo.fromJson(json));
     }
     return photos;
