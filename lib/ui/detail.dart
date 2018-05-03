@@ -57,9 +57,18 @@ class DetailWidget extends StatelessWidget {
     ));
     contents.add(new Container(height: 8.0));
     if (photo.user.profileImage != null) {
-      contents.add(new AvatarListItem(imageUrl: profileImage.medium, text: photo.user.name));
+      contents.add(new ListTile(
+        leading: new CircleAvatar(
+          backgroundImage: new NetworkImage(profileImage.medium),
+          radius: 20.0,
+        ),
+        title: new Text(photo.user.name),
+      ));
     } else {
-      contents.add(new DetailListItem(icon: Icons.person, text: photo.user.name));
+      contents.add(new ListTile(
+        leading: new Icon(Icons.person, color: Colors.black54),
+        title: new Text(photo.user.name),
+      ));
     }
     if (photo.user.bio != null) {
       contents.add(new Padding(
@@ -70,62 +79,15 @@ class DetailWidget extends StatelessWidget {
     contents.add(new Container(height: 16.0));
     contents.add(new Divider(height: 0.0, indent: 72.0));
     contents.add(new Container(height: 8.0));
-    contents.add(new DetailListItem(
-      icon: Icons.photo_size_select_large,
-      text: "${photo.width}px x ${photo.height}px",
+    contents.add(new ListTile(
+      leading: new Icon(Icons.photo_size_select_large, color: Colors.black54),
+      title: new Text("${photo.width}px x ${photo.height}px"),
     ));
-    contents.add(new DetailListItem(
-      icon: Icons.access_time,
-      text: DateFormat('yyyy/MM/dd HH:mm').format(photo.createdAt.toLocal()),
+    contents.add(new ListTile(
+      leading: new Icon(Icons.access_time, color: Colors.black54),
+      title: new Text(DateFormat('yyyy/MM/dd HH:mm').format(photo.createdAt.toLocal())),
     ));
     contents.add(new Container(height: 8.0));
     return contents;
   }
-}
-
-class AvatarListItem extends StatelessWidget {
-  final String imageUrl;
-  final String text;
-
-  const AvatarListItem({Key key, this.imageUrl, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => new Container(
-        child: new Row(
-          children: <Widget>[
-            new CircleAvatar(
-              backgroundImage: new NetworkImage(imageUrl),
-              radius: 20.0,
-            ),
-            new Container(
-              child: new Text(text, style: Theme.of(context).textTheme.subhead),
-              margin: new EdgeInsets.only(left: 16.0),
-            )
-          ],
-        ),
-        height: 56.0,
-        padding: new EdgeInsets.symmetric(horizontal: 16.0),
-      );
-}
-
-class DetailListItem extends StatelessWidget {
-  final IconData icon;
-  final String text;
-
-  const DetailListItem({Key key, this.icon, this.text}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => new Container(
-        child: new Row(
-          children: <Widget>[
-            new Icon(icon, color: Colors.black54),
-            new Container(
-              child: new Text(text, style: Theme.of(context).textTheme.subhead),
-              margin: new EdgeInsets.only(left: 32.0),
-            )
-          ],
-        ),
-        height: 48.0,
-        padding: new EdgeInsets.symmetric(horizontal: 16.0),
-      );
 }
