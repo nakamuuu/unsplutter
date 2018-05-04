@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:unsplutter/api/photo.dart';
+import 'package:unsplutter/util/color_utils.dart';
 
 class DetailWidget extends StatelessWidget {
   final Photo photo;
@@ -10,15 +11,12 @@ class DetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: Move the color parsing process to another layer
-    final normalizedColorString = "FF${photo.color.substring(photo.color.length - 6)}";
-    final imageColor = new Color(int.parse(normalizedColorString, radix: 16));
     return new Scaffold(
       body: new CustomScrollView(
         primary: true,
         slivers: <Widget>[
           new SliverAppBar(
-            backgroundColor: imageColor,
+            backgroundColor: ColorUtils.colorFromHexString(photo.color),
             expandedHeight: MediaQuery.of(context).size.width / photo.width * photo.height,
             pinned: true,
             flexibleSpace: new FlexibleSpaceBar(

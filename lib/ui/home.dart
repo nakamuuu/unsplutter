@@ -4,6 +4,7 @@ import 'package:unsplutter/api/photo.dart';
 import 'package:unsplutter/api/unsplash_api.dart';
 import 'package:unsplutter/localizations.dart';
 import 'package:unsplutter/ui/detail.dart';
+import 'package:unsplutter/util/color_utils.dart';
 
 class HomeWidget extends StatefulWidget {
   @override
@@ -35,30 +36,35 @@ class PhotosList extends StatelessWidget {
   const PhotosList({Key key, this.photos}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => new GridView.builder(
-        gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1.0,
-        ),
-        itemCount: photos.length,
-        itemBuilder: (context, index) {
-          return new InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                new MaterialPageRoute<Null>(
-                  settings: const RouteSettings(name: "/detail"),
-                  builder: (BuildContext context) => new DetailWidget(photo: photos[index]),
+  Widget build(BuildContext context) => new ListView.builder(
+      itemCount: photos.length,
+      itemBuilder: (context, index) => new AspectRatio(
+            aspectRatio: 1.0,
+            child: new Stack(
+              children: <Widget>[
+                new Container(color: ColorUtils.colorFromHexString(photos[index].color)),
+                new FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: photos[index].urls.regular,
+                  fadeInDuration: Duration(milliseconds: 225),
+                  fit: BoxFit.cover,
                 ),
-              );
-            },
-            child: new FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: photos[index].urls.small,
-              fadeInDuration: Duration(milliseconds: 225),
-              fit: BoxFit.cover,
+                new Material(
+                  type: MaterialType.transparency,
+                  child: new InkWell(
+                    splashColor: Colors.white10,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        new MaterialPageRoute(
+                          builder: (BuildContext context) => new DetailWidget(photo: photos[index]),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+              fit: StackFit.expand,
             ),
-          );
-        },
-      );
+          ));
 }
