@@ -13,19 +13,39 @@ class HomeWidget extends StatefulWidget {
 
 class HomeState extends State<HomeWidget> {
   @override
-  Widget build(BuildContext context) => new Scaffold(
-        appBar: new AppBar(
-          title: new Text(UnsplutterLocalizations.of(context).trans('app_name')),
-          backgroundColor: Colors.grey.shade900,
-        ),
-        body: new FutureBuilder<List<Photo>>(
-          future: UnsplashApi().getPhotos(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            return snapshot.hasData
-                ? new PhotosList(photos: snapshot.data)
-                : new Center(child: new CircularProgressIndicator());
-          },
+  Widget build(BuildContext context) => new DefaultTabController(
+        length: 2,
+        child: new Scaffold(
+          appBar: new AppBar(
+            title: new Text(UnsplutterLocalizations.of(context).trans('app_name')),
+            backgroundColor: Colors.grey.shade900,
+            bottom: new TabBar(
+              tabs: [
+                new Tab(text: "PHOTO"),
+                new Tab(text: "CURATED"),
+              ],
+            ),
+          ),
+          body: new TabBarView(children: <Widget>[
+            new FutureBuilder<List<Photo>>(
+              future: UnsplashApi().getPhotos(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                return snapshot.hasData
+                    ? new PhotosList(photos: snapshot.data)
+                    : new Center(child: new CircularProgressIndicator());
+              },
+            ),
+            new FutureBuilder<List<Photo>>(
+              future: UnsplashApi().getCuratedPhotos(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                return snapshot.hasData
+                    ? new PhotosList(photos: snapshot.data)
+                    : new Center(child: new CircularProgressIndicator());
+              },
+            ),
+          ]),
         ),
       );
 }
@@ -37,34 +57,38 @@ class PhotosList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => new ListView.builder(
-      itemCount: photos.length,
-      itemBuilder: (context, index) => new AspectRatio(
-            aspectRatio: 1.0,
-            child: new Stack(
-              children: <Widget>[
-                new Container(color: ColorUtils.colorFromHexString(photos[index].color)),
-                new FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage,
-                  image: photos[index].urls.regular,
-                  fadeInDuration: Duration(milliseconds: 225),
-                  fit: BoxFit.cover,
-                ),
-                new Material(
-                  type: MaterialType.transparency,
-                  child: new InkWell(
-                    splashColor: Colors.white10,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        new MaterialPageRoute(
-                          builder: (BuildContext context) => new DetailWidget(photo: photos[index]),
-                        ),
-                      );
-                    },
+        itemCount: photos.length,
+        itemBuilder: (context, index) => new AspectRatio(
+              aspectRatio: photos[index].width / photos[index].height,
+              child: new Stack(
+                children: <Widget>[
+                  new Container(
+                    color: ColorUtils.colorFromHexString(photos[index].color),
+                    child: new FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: photos[index].urls.regular,
+                      fadeInDuration: Duration(milliseconds: 225),
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-              ],
-              fit: StackFit.expand,
+                  new Material(
+                    type: MaterialType.transparency,
+                    child: new InkWell(
+                      splashColor: Colors.white10,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new DetailWidget(photo: photos[index]),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+                fit: StackFit.expand,
+              ),
             ),
-          ));
+      );
 }

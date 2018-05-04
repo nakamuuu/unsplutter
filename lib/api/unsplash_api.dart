@@ -14,4 +14,10 @@ class UnsplashApi {
     final List decodedBody = json.decode(utf8.decode(response.bodyBytes));
     return decodedBody.map<Photo>((json) => Photo.fromJson(json)).toList();
   }
+
+  Future<List<Photo>> getCuratedPhotos({perPage: 30}) async {
+    final Response response = await get("$baseUrl/photos/curated?per_page=$perPage", headers: headers);
+    final List decodedBody = json.decode(utf8.decode(response.bodyBytes));
+    return decodedBody.map<Photo>((json) => Photo.fromJson(json)).toList();
+  }
 }
