@@ -13,12 +13,26 @@ class PhotosPage extends StatefulWidget {
 }
 
 class PhotosPageState extends State<PhotosPage> with TickerProviderStateMixin {
+  final String _tabIndexIdentifier = 'photos_tab_index';
+  final Key _allTabKey = const PageStorageKey('photos_all');
+  final Key _curatedTabKey = const PageStorageKey('photos_curated');
+
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 2);
+    // Workaround for https://github.com/flutter/flutter/issues/10969
+    final index = PageStorage.of(context).readState(context, identifier: _tabIndexIdentifier) ?? 0;
+    _tabController = new TabController(
+      vsync: this,
+      length: 2,
+      initialIndex: index,
+    )..addListener(() {
+        PageStorage
+            .of(context)
+            .writeState(context, _tabController.index, identifier: _tabIndexIdentifier);
+      });
   }
 
   @override
@@ -51,7 +65,7 @@ class PhotosPageState extends State<PhotosPage> with TickerProviderStateMixin {
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new PhotosListView(photos: snapshot.data)
+                    ? new PhotosListView(key: _allTabKey, photos: snapshot.data)
                     : new Center(child: new CircularProgressIndicator());
               },
             ),
@@ -60,7 +74,7 @@ class PhotosPageState extends State<PhotosPage> with TickerProviderStateMixin {
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new PhotosListView(photos: snapshot.data)
+                    ? new PhotosListView(key: _curatedTabKey, photos: snapshot.data)
                     : new Center(child: new CircularProgressIndicator());
               },
             ),
@@ -98,7 +112,8 @@ class PhotosListView extends StatelessWidget {
                       Navigator.push(
                         context,
                         new MaterialPageRoute(
-                          builder: (BuildContext context) => new PhotoDetailPage(photo: photos[index]),
+                          builder: (BuildContext context) =>
+                              new PhotoDetailPage(photo: photos[index]),
                         ),
                       );
                     },

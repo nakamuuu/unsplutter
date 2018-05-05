@@ -13,12 +13,27 @@ class CollectionsPage extends StatefulWidget {
 }
 
 class CollectionsPageState extends State<CollectionsPage> with TickerProviderStateMixin {
+  final String _tabIndexIdentifier = 'collections_tab_index';
+  final Key _allTabKey = const PageStorageKey('collections_all');
+  final Key _featuredTabKey = const PageStorageKey('collections_featured');
+  final Key _curatedTabKey = const PageStorageKey('collections_curated');
+
   TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    _tabController = new TabController(vsync: this, length: 3);
+    // Workaround for https://github.com/flutter/flutter/issues/10969
+    final index = PageStorage.of(context).readState(context, identifier: _tabIndexIdentifier) ?? 0;
+    _tabController = new TabController(
+      vsync: this,
+      length: 3,
+      initialIndex: index,
+    )..addListener(() {
+        PageStorage
+            .of(context)
+            .writeState(context, _tabController.index, identifier: _tabIndexIdentifier);
+      });
   }
 
   @override
@@ -55,7 +70,7 @@ class CollectionsPageState extends State<CollectionsPage> with TickerProviderSta
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new CollectionsListView(collections: snapshot.data)
+                    ? new CollectionsListView(key: _allTabKey, collections: snapshot.data)
                     : new Center(child: new CircularProgressIndicator());
               },
             ),
@@ -65,7 +80,7 @@ class CollectionsPageState extends State<CollectionsPage> with TickerProviderSta
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new CollectionsListView(collections: snapshot.data)
+                    ? new CollectionsListView(key: _featuredTabKey, collections: snapshot.data)
                     : new Center(child: new CircularProgressIndicator());
               },
             ),
@@ -75,7 +90,7 @@ class CollectionsPageState extends State<CollectionsPage> with TickerProviderSta
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new CollectionsListView(collections: snapshot.data)
+                    ? new CollectionsListView(key: _curatedTabKey, collections: snapshot.data)
                     : new Center(child: new CircularProgressIndicator());
               },
             ),
