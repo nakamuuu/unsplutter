@@ -4,7 +4,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:unsplutter/api/collection.dart';
 import 'package:unsplutter/api/unsplash_api.dart';
 import 'package:unsplutter/localizations.dart';
-import 'package:unsplutter/ui/detail.dart';
+import 'package:unsplutter/ui/photo_detail.dart';
 import 'package:unsplutter/util/color_utils.dart';
 
 class CollectionsPage extends StatefulWidget {
@@ -169,7 +169,7 @@ class CollectionsListView extends StatelessWidget {
                         new MaterialPageRoute(
                           // TODO: Create the collection detail page.
                           builder: (BuildContext context) =>
-                              new DetailWidget(photo: collection.coverPhoto),
+                              new PhotoDetailPage(photo: collection.coverPhoto),
                         ),
                       );
                     },

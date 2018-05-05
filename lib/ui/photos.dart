@@ -4,7 +4,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:unsplutter/api/photo.dart';
 import 'package:unsplutter/api/unsplash_api.dart';
 import 'package:unsplutter/localizations.dart';
-import 'package:unsplutter/ui/detail.dart';
+import 'package:unsplutter/ui/photo_detail.dart';
 import 'package:unsplutter/util/color_utils.dart';
 
 class PhotosPage extends StatefulWidget {
@@ -98,7 +98,7 @@ class PhotosListView extends StatelessWidget {
                       Navigator.push(
                         context,
                         new MaterialPageRoute(
-                          builder: (BuildContext context) => new DetailWidget(photo: photos[index]),
+                          builder: (BuildContext context) => new PhotoDetailPage(photo: photos[index]),
                         ),
                       );
                     },

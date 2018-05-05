@@ -4,42 +4,40 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:unsplutter/api/photo.dart';
 import 'package:unsplutter/util/color_utils.dart';
 
-class DetailWidget extends StatelessWidget {
+class PhotoDetailPage extends StatelessWidget {
   final Photo photo;
 
-  const DetailWidget({Key key, this.photo}) : super(key: key);
+  const PhotoDetailPage({Key key, this.photo}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      body: new CustomScrollView(
-        primary: true,
-        slivers: <Widget>[
-          new SliverAppBar(
-            backgroundColor: ColorUtils.colorFromHexString(photo.color),
-            expandedHeight: MediaQuery.of(context).size.width / photo.width * photo.height,
-            pinned: true,
-            flexibleSpace: new FlexibleSpaceBar(
-              background: new FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: photo.urls.regular,
-                fadeInDuration: Duration(milliseconds: 225),
-                fit: BoxFit.cover,
+  Widget build(BuildContext context) => new Scaffold(
+        body: new CustomScrollView(
+          primary: true,
+          slivers: <Widget>[
+            new SliverAppBar(
+              backgroundColor: ColorUtils.colorFromHexString(photo.color),
+              expandedHeight: MediaQuery.of(context).size.width / photo.width * photo.height,
+              pinned: true,
+              flexibleSpace: new FlexibleSpaceBar(
+                background: new FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: photo.urls.regular,
+                  fadeInDuration: Duration(milliseconds: 225),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
-          ),
-          new SliverSafeArea(
-            top: false,
-            sliver: new SliverList(
-              delegate: new SliverChildListDelegate(createListContent(context)),
+            new SliverSafeArea(
+              top: false,
+              sliver: new SliverList(
+                delegate: new SliverChildListDelegate(_createListContent(context)),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+      );
 
-  List<Widget> createListContent(BuildContext context) {
+  List<Widget> _createListContent(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final profileImage = photo.user.profileImage;
     final description = photo.description ?? "Photo by ${photo.user.name}";
