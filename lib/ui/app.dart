@@ -25,9 +25,10 @@ class UnsplutterApp extends StatelessWidget {
         }
       },
       theme: new ThemeData(
-        primarySwatch: Colors.pink,
+        primaryColor: Colors.grey.shade900,
+        accentColor: Colors.pinkAccent,
       ),
-      home: new HomeWidget(),
+      home: new HomePage(),
     );
   }
 }

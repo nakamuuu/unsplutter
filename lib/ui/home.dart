@@ -1,94 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
-import 'package:unsplutter/api/photo.dart';
-import 'package:unsplutter/api/unsplash_api.dart';
 import 'package:unsplutter/localizations.dart';
-import 'package:unsplutter/ui/detail.dart';
-import 'package:unsplutter/util/color_utils.dart';
+import 'package:unsplutter/ui/collections.dart';
+import 'package:unsplutter/ui/home_content.dart';
+import 'package:unsplutter/ui/navigation_drawer.dart';
+import 'package:unsplutter/ui/photos.dart';
 
-class HomeWidget extends StatefulWidget {
+class HomePage extends StatefulWidget {
   @override
-  HomeState createState() => new HomeState();
+  HomePageState createState() => new HomePageState();
 }
 
-class HomeState extends State<HomeWidget> {
+class HomePageState extends State<HomePage> {
+  List<HomeContent> _contents;
+  int _currentIndex = 0;
+
   @override
-  Widget build(BuildContext context) => new DefaultTabController(
-        length: 2,
-        child: new Scaffold(
-          appBar: new AppBar(
-            title: new Text(UnsplutterLocalizations.of(context).trans('app_name')),
-            backgroundColor: Colors.grey.shade900,
-            bottom: new TabBar(
-              tabs: [
-                new Tab(text: "PHOTO"),
-                new Tab(text: "CURATED"),
-              ],
-            ),
-          ),
-          body: new TabBarView(children: <Widget>[
-            new FutureBuilder<List<Photo>>(
-              future: UnsplashApi().getPhotos(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) print(snapshot.error);
-                return snapshot.hasData
-                    ? new PhotosList(photos: snapshot.data)
-                    : new Center(child: new CircularProgressIndicator());
-              },
-            ),
-            new FutureBuilder<List<Photo>>(
-              future: UnsplashApi().getCuratedPhotos(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) print(snapshot.error);
-                return snapshot.hasData
-                    ? new PhotosList(photos: snapshot.data)
-                    : new Center(child: new CircularProgressIndicator());
-              },
-            ),
-          ]),
+  Widget build(BuildContext context) {
+    if (_contents == null) {
+      _contents = [
+        new HomeContent(
+          Icons.home,
+          UnsplutterLocalizations.of(context).trans('home'),
+          UnsplutterLocalizations.of(context).trans('app_name'),
+          true,
+          (() => new PhotosPage()),
         ),
-      );
-}
+        new HomeContent(
+          Icons.collections,
+          UnsplutterLocalizations.of(context).trans('collections'),
+          UnsplutterLocalizations.of(context).trans('collections'),
+          true,
+          (() => new CollectionsPage()),
+        ),
+      ];
+    }
 
-class PhotosList extends StatelessWidget {
-  final List<Photo> photos;
-
-  const PhotosList({Key key, this.photos}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => new ListView.builder(
-        itemCount: photos.length,
-        itemBuilder: (context, index) => new AspectRatio(
-              aspectRatio: photos[index].width / photos[index].height,
-              child: new Stack(
-                children: <Widget>[
-                  new Container(
-                    color: ColorUtils.colorFromHexString(photos[index].color),
-                    child: new FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: photos[index].urls.regular,
-                      fadeInDuration: Duration(milliseconds: 225),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  new Material(
-                    type: MaterialType.transparency,
-                    child: new InkWell(
-                      splashColor: Colors.white10,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          new MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                new DetailWidget(photo: photos[index]),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
-                fit: StackFit.expand,
-              ),
-            ),
-      );
+    return new Scaffold(
+      drawer: new NavigationDrawer(
+        contents: _contents,
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+      ),
+      appBar: new AppBar(
+        title: new Text(_contents[_currentIndex].title),
+        elevation: _contents[_currentIndex].hasTab ? 0.0 : 4.0,
+      ),
+      body: _contents[_currentIndex].body(),
+    );
+  }
 }
