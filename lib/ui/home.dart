@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:unsplutter/localizations.dart';
 import 'package:unsplutter/ui/collections.dart';
@@ -49,7 +51,23 @@ class HomePageState extends State<HomePage> {
         title: new Text(_contents[_currentIndex].title),
         elevation: _contents[_currentIndex].hasTab ? 0.0 : 4.0,
       ),
-      body: _contents[_currentIndex].body(),
+      body: new WillPopScope(
+        onWillPop: _onWillPop,
+        child: _contents[_currentIndex].body(),
+      ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    // Don't exit the app when pushing back other than the home page.
+    if (_currentIndex == 0 || Navigator.canPop(context)) {
+      // Make default behaviors when the drawer is open or on the home page.
+      return true;
+    } else {
+      setState(() {
+        _currentIndex = 0;
+      });
+      return false;
+    }
   }
 }
