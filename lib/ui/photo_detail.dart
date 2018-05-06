@@ -15,15 +15,17 @@ class PhotoDetailPage extends StatelessWidget {
           primary: true,
           slivers: <Widget>[
             new SliverAppBar(
-              backgroundColor: ColorUtils.colorFromHexString(photo.color),
               expandedHeight: MediaQuery.of(context).size.width / photo.width * photo.height,
               pinned: true,
               flexibleSpace: new FlexibleSpaceBar(
-                background: new FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage,
-                  image: photo.urls.regular,
-                  fadeInDuration: Duration(milliseconds: 225),
-                  fit: BoxFit.cover,
+                background: new Container(
+                  color: ColorUtils.colorFromHexString(photo.color),
+                  child: new FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: photo.urls.regular,
+                    fadeInDuration: Duration(milliseconds: 225),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

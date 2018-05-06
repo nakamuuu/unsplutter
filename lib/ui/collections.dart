@@ -51,6 +51,8 @@ class CollectionsPageState extends State<CollectionsPage> with TickerProviderSta
             elevation: 4.0,
             child: new TabBar(
               controller: _tabController,
+              labelColor: Colors.black87,
+              unselectedLabelColor: Colors.black54,
               tabs: [
                 new Tab(text: UnsplutterLocalizations.of(context).trans('collections_tab_all')),
                 new Tab(

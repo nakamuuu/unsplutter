@@ -29,19 +29,27 @@ class NavigationDrawer extends StatelessWidget {
         ),
       ),
     ];
-    drawerChildren.addAll(contents.map((content) => new ListTileTheme(
+    drawerChildren.addAll(contents.map((content) {
+      final bool isSelected = contents.indexOf(content) == currentIndex;
+      return new Container(
+        decoration: new BoxDecoration(
+          color: isSelected ? Colors.grey.shade200 : Colors.transparent,
+        ),
+        child: new ListTileTheme(
           style: ListTileStyle.drawer,
           selectedColor: Theme.of(context).accentColor,
           child: new ListTile(
             leading: new Icon(content.icon),
             title: new Text(content.drawerLabel),
-            selected: contents.indexOf(content) == currentIndex,
+            selected: isSelected,
             onTap: () {
               Navigator.pop(context);
               onTap(contents.indexOf(content));
             },
           ),
-        )));
+        ),
+      );
+    }));
     return new Drawer(child: new ListView(padding: EdgeInsets.zero, children: drawerChildren));
   }
 }

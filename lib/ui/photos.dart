@@ -50,6 +50,8 @@ class PhotosPageState extends State<PhotosPage> with TickerProviderStateMixin {
             elevation: 4.0,
             child: new TabBar(
               controller: _tabController,
+              labelColor: Colors.black87,
+              unselectedLabelColor: Colors.black54,
               tabs: [
                 new Tab(text: UnsplutterLocalizations.of(context).trans('photos_tab_all')),
                 new Tab(text: UnsplutterLocalizations.of(context).trans('photos_tab_curated')),

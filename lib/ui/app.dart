@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:unsplutter/colors.dart';
 import 'package:unsplutter/localizations.dart';
 import 'package:unsplutter/ui/home.dart';
 
@@ -25,8 +26,9 @@ class UnsplutterApp extends StatelessWidget {
         }
       },
       theme: new ThemeData(
-        primaryColor: Colors.grey.shade900,
-        accentColor: Colors.pinkAccent,
+        primaryColor: Colors.grey.shade100,
+        accentColor: UnsplutterColors.unsplutterAccent,
+        scaffoldBackgroundColor: Colors.grey.shade50,
       ),
       home: new HomePage(),
     );
