@@ -1,5 +1,6 @@
 {
   "app_name": "Unsplutter",
+  "drawer_app_description": " - powered by Unsplash.com",
   "home": "Home",
   "photos_tab_all": "PHOTOS",
   "photos_tab_curated": "CURATED",

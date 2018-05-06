@@ -19,5 +19,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - res/image/drawer_header.png
     - res/localization/en.json
     - res/localization/ja.json
