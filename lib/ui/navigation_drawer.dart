@@ -19,29 +19,29 @@ class NavigationDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<Widget> drawerChildren = [
-      new DrawerHeader(
-        child: new Align(
+      DrawerHeader(
+        child: Align(
           alignment: Alignment.bottomLeft,
-          child: new Container(
+          child: Container(
             height: 56.0,
-            child: new Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                new Row(children: [
-                  new Text(
+                Row(children: [
+                  Text(
                     UnsplutterLocalizations.of(context).trans("app_name"),
                     style: Theme.of(context).textTheme.body2.copyWith(color: Colors.white),
                   ),
-                  new Text(
+                  Text(
                     UnsplutterLocalizations.of(context).trans("drawer_app_description"),
                     style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white70),
                   ),
                 ]),
-                new Container(height: 2.0),
-                new FutureBuilder<String>(
+                Container(height: 2.0),
+                FutureBuilder<String>(
                   future: PackageInfo.fromPlatform().then((info) => "version ${info.version}"),
-                  builder: (context, snapshot) => new Text(
+                  builder: (context, snapshot) => Text(
                         snapshot.hasData ? snapshot.data : "",
                         style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
                       ),
@@ -50,9 +50,9 @@ class NavigationDrawer extends StatelessWidget {
             ),
           ),
         ),
-        decoration: new BoxDecoration(
-          image: new DecorationImage(
-            image: new AssetImage('res/image/drawer_header.png'),
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('res/image/drawer_header.png'),
             fit: BoxFit.cover,
           ),
         ),
@@ -60,16 +60,16 @@ class NavigationDrawer extends StatelessWidget {
     ];
     drawerChildren.addAll(contents.map((content) {
       final bool isSelected = contents.indexOf(content) == currentIndex;
-      return new Container(
-        decoration: new BoxDecoration(
+      return Container(
+        decoration: BoxDecoration(
           color: isSelected ? Colors.grey.shade200 : Colors.transparent,
         ),
-        child: new ListTileTheme(
+        child: ListTileTheme(
           style: ListTileStyle.drawer,
           selectedColor: Theme.of(context).accentColor,
-          child: new ListTile(
-            leading: new Icon(content.icon),
-            title: new Text(content.drawerLabel),
+          child: ListTile(
+            leading: Icon(content.icon),
+            title: Text(content.drawerLabel),
             selected: isSelected,
             onTap: () {
               Navigator.pop(context);
@@ -79,6 +79,6 @@ class NavigationDrawer extends StatelessWidget {
         ),
       );
     }));
-    return new Drawer(child: new ListView(padding: EdgeInsets.zero, children: drawerChildren));
+    return Drawer(child: ListView(padding: EdgeInsets.zero, children: drawerChildren));
   }
 }

@@ -9,7 +9,7 @@ import 'package:unsplutter/util/color_utils.dart';
 
 class CollectionsPage extends StatefulWidget {
   @override
-  CollectionsPageState createState() => new CollectionsPageState();
+  CollectionsPageState createState() => CollectionsPageState();
 }
 
 class CollectionsPageState extends State<CollectionsPage> with TickerProviderStateMixin {
@@ -25,7 +25,7 @@ class CollectionsPageState extends State<CollectionsPage> with TickerProviderSta
     super.initState();
     // Workaround for https://github.com/flutter/flutter/issues/10969
     final index = PageStorage.of(context).readState(context, identifier: _tabIndexIdentifier) ?? 0;
-    _tabController = new TabController(
+    _tabController = TabController(
       vsync: this,
       length: 3,
       initialIndex: index,
@@ -43,57 +43,55 @@ class CollectionsPageState extends State<CollectionsPage> with TickerProviderSta
   }
 
   @override
-  Widget build(BuildContext context) => new Scaffold(
-        appBar: new PreferredSize(
-          preferredSize: new Size.fromHeight(kTextTabBarHeight),
-          child: new Material(
+  Widget build(BuildContext context) => Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(kTextTabBarHeight),
+          child: Material(
             color: Theme.of(context).primaryColor,
             elevation: 4.0,
-            child: new TabBar(
+            child: TabBar(
               controller: _tabController,
               labelColor: Colors.black87,
               unselectedLabelColor: Colors.black54,
               tabs: [
-                new Tab(text: UnsplutterLocalizations.of(context).trans('collections_tab_all')),
-                new Tab(
-                  text: UnsplutterLocalizations.of(context).trans('collections_tab_featured'),
-                ),
-                new Tab(text: UnsplutterLocalizations.of(context).trans('collections_tab_curated')),
+                Tab(text: UnsplutterLocalizations.of(context).trans('collections_tab_all')),
+                Tab(text: UnsplutterLocalizations.of(context).trans('collections_tab_featured')),
+                Tab(text: UnsplutterLocalizations.of(context).trans('collections_tab_curated')),
               ],
             ),
           ),
         ),
-        body: new TabBarView(
+        body: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            new FutureBuilder<List<Collection>>(
+            FutureBuilder<List<Collection>>(
               future: UnsplashApi().getCollections().then((collections) =>
                   collections.where((collection) => collection?.coverPhoto != null).toList()),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new CollectionsListView(key: _allTabKey, collections: snapshot.data)
-                    : new Center(child: new CircularProgressIndicator());
+                    ? CollectionsListView(key: _allTabKey, collections: snapshot.data)
+                    : Center(child: CircularProgressIndicator());
               },
             ),
-            new FutureBuilder<List<Collection>>(
+            FutureBuilder<List<Collection>>(
               future: UnsplashApi().getFeaturedCollections().then((collections) =>
                   collections.where((collection) => collection?.coverPhoto != null).toList()),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new CollectionsListView(key: _featuredTabKey, collections: snapshot.data)
-                    : new Center(child: new CircularProgressIndicator());
+                    ? CollectionsListView(key: _featuredTabKey, collections: snapshot.data)
+                    : Center(child: CircularProgressIndicator());
               },
             ),
-            new FutureBuilder<List<Collection>>(
+            FutureBuilder<List<Collection>>(
               future: UnsplashApi().getCuratedCollections().then((collections) =>
                   collections.where((collection) => collection?.coverPhoto != null).toList()),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new CollectionsListView(key: _curatedTabKey, collections: snapshot.data)
-                    : new Center(child: new CircularProgressIndicator());
+                    ? CollectionsListView(key: _curatedTabKey, collections: snapshot.data)
+                    : Center(child: CircularProgressIndicator());
               },
             ),
           ],
@@ -107,20 +105,20 @@ class CollectionsListView extends StatelessWidget {
   const CollectionsListView({Key key, @required this.collections}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => new ListView.builder(
+  Widget build(BuildContext context) => ListView.builder(
         itemCount: collections.length,
         itemBuilder: (context, index) {
           final Collection collection = collections[index];
 
           final List<Widget> overlayTexts = [];
-          overlayTexts.add(new Row(
+          overlayTexts.add(Row(
             children: [
-              new CircleAvatar(
-                backgroundImage: new NetworkImage(collection.user.profileImage.medium),
+              CircleAvatar(
+                backgroundImage: NetworkImage(collection.user.profileImage.medium),
                 radius: 12.0,
               ),
-              new Container(width: 16.0),
-              new Text(
+              Container(width: 16.0),
+              Text(
                 collection.user.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -128,8 +126,8 @@ class CollectionsListView extends StatelessWidget {
               ),
             ],
           ));
-          overlayTexts.add(new Container(height: 16.0));
-          overlayTexts.add(new Text(
+          overlayTexts.add(Container(height: 16.0));
+          overlayTexts.add(Text(
             collection.title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -138,55 +136,55 @@ class CollectionsListView extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                 ),
           ));
-          overlayTexts.add(new Container(height: 8.0));
+          overlayTexts.add(Container(height: 8.0));
           final String description = collection.description != null
               ? "${collection.totalPhotos} Photos | ${collection.description}"
               : "${collection.totalPhotos} Photos";
-          overlayTexts.add(new Text(
+          overlayTexts.add(Text(
             description,
             maxLines: 3,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.body1.copyWith(color: Colors.white),
           ));
 
-          return new AspectRatio(
+          return AspectRatio(
             aspectRatio: collection.coverPhoto.width / collection.coverPhoto.height,
-            child: new Stack(
+            child: Stack(
               children: <Widget>[
-                new Container(
+                Container(
                   color: ColorUtils.colorFromHexString(collection.coverPhoto.color),
-                  child: new FadeInImage.memoryNetwork(
+                  child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
                     image: collection.coverPhoto.urls.regular,
                     fadeInDuration: Duration(milliseconds: 225),
                     fit: BoxFit.cover,
                   ),
                 ),
-                new Container(
-                  decoration: new BoxDecoration(
-                    gradient: new LinearGradient(
+                Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [Colors.black45, Colors.black26, Colors.black12, Colors.transparent],
                     ),
                   ),
-                  padding: new EdgeInsets.all(16.0),
-                  child: new Column(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: overlayTexts,
                   ),
                 ),
-                new Material(
+                Material(
                   type: MaterialType.transparency,
-                  child: new InkWell(
+                  child: InkWell(
                     splashColor: Colors.white10,
                     onTap: () {
                       Navigator.push(
                         context,
-                        new MaterialPageRoute(
+                        MaterialPageRoute(
                           // TODO: Create the collection detail page.
                           builder: (BuildContext context) =>
-                              new PhotoDetailPage(photo: collection.coverPhoto),
+                              PhotoDetailPage(photo: collection.coverPhoto),
                         ),
                       );
                     },

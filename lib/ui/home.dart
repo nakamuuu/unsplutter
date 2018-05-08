@@ -9,7 +9,7 @@ import 'package:unsplutter/ui/photos.dart';
 
 class HomePage extends StatefulWidget {
   @override
-  HomePageState createState() => new HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
@@ -20,25 +20,25 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     if (_contents == null) {
       _contents = [
-        new HomeContent(
+        HomeContent(
           Icons.home,
           UnsplutterLocalizations.of(context).trans('home'),
           UnsplutterLocalizations.of(context).trans('app_name'),
           true,
-          (() => new PhotosPage()),
+          (() => PhotosPage()),
         ),
-        new HomeContent(
+        HomeContent(
           Icons.collections,
           UnsplutterLocalizations.of(context).trans('collections'),
           UnsplutterLocalizations.of(context).trans('collections'),
           true,
-          (() => new CollectionsPage()),
+          (() => CollectionsPage()),
         ),
       ];
     }
 
-    return new Scaffold(
-      drawer: new NavigationDrawer(
+    return Scaffold(
+      drawer: NavigationDrawer(
         contents: _contents,
         currentIndex: _currentIndex,
         onTap: (index) {
@@ -47,11 +47,11 @@ class HomePageState extends State<HomePage> {
           });
         },
       ),
-      appBar: new AppBar(
-        title: new Text(_contents[_currentIndex].title),
+      appBar: AppBar(
+        title: Text(_contents[_currentIndex].title),
         elevation: _contents[_currentIndex].hasTab ? 0.0 : 4.0,
       ),
-      body: new WillPopScope(
+      body: WillPopScope(
         onWillPop: _onWillPop,
         child: _contents[_currentIndex].body(),
       ),

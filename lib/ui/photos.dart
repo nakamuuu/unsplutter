@@ -9,7 +9,7 @@ import 'package:unsplutter/util/color_utils.dart';
 
 class PhotosPage extends StatefulWidget {
   @override
-  PhotosPageState createState() => new PhotosPageState();
+  PhotosPageState createState() => PhotosPageState();
 }
 
 class PhotosPageState extends State<PhotosPage> with TickerProviderStateMixin {
@@ -24,7 +24,7 @@ class PhotosPageState extends State<PhotosPage> with TickerProviderStateMixin {
     super.initState();
     // Workaround for https://github.com/flutter/flutter/issues/10969
     final index = PageStorage.of(context).readState(context, identifier: _tabIndexIdentifier) ?? 0;
-    _tabController = new TabController(
+    _tabController = TabController(
       vsync: this,
       length: 2,
       initialIndex: index,
@@ -42,42 +42,42 @@ class PhotosPageState extends State<PhotosPage> with TickerProviderStateMixin {
   }
 
   @override
-  Widget build(BuildContext context) => new Scaffold(
-        appBar: new PreferredSize(
-          preferredSize: new Size.fromHeight(kTextTabBarHeight),
-          child: new Material(
+  Widget build(BuildContext context) => Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(kTextTabBarHeight),
+          child: Material(
             color: Theme.of(context).primaryColor,
             elevation: 4.0,
-            child: new TabBar(
+            child: TabBar(
               controller: _tabController,
               labelColor: Colors.black87,
               unselectedLabelColor: Colors.black54,
               tabs: [
-                new Tab(text: UnsplutterLocalizations.of(context).trans('photos_tab_all')),
-                new Tab(text: UnsplutterLocalizations.of(context).trans('photos_tab_curated')),
+                Tab(text: UnsplutterLocalizations.of(context).trans('photos_tab_all')),
+                Tab(text: UnsplutterLocalizations.of(context).trans('photos_tab_curated')),
               ],
             ),
           ),
         ),
-        body: new TabBarView(
+        body: TabBarView(
           controller: _tabController,
           children: <Widget>[
-            new FutureBuilder<List<Photo>>(
+            FutureBuilder<List<Photo>>(
               future: UnsplashApi().getPhotos(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new PhotosListView(key: _allTabKey, photos: snapshot.data)
-                    : new Center(child: new CircularProgressIndicator());
+                    ? PhotosListView(key: _allTabKey, photos: snapshot.data)
+                    : Center(child: CircularProgressIndicator());
               },
             ),
-            new FutureBuilder<List<Photo>>(
+            FutureBuilder<List<Photo>>(
               future: UnsplashApi().getCuratedPhotos(),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
                 return snapshot.hasData
-                    ? new PhotosListView(key: _curatedTabKey, photos: snapshot.data)
-                    : new Center(child: new CircularProgressIndicator());
+                    ? PhotosListView(key: _curatedTabKey, photos: snapshot.data)
+                    : Center(child: CircularProgressIndicator());
               },
             ),
           ],
@@ -91,31 +91,30 @@ class PhotosListView extends StatelessWidget {
   const PhotosListView({Key key, @required this.photos}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => new ListView.builder(
+  Widget build(BuildContext context) => ListView.builder(
       itemCount: photos.length,
-      itemBuilder: (context, index) => new AspectRatio(
+      itemBuilder: (context, index) => AspectRatio(
             aspectRatio: photos[index].width / photos[index].height,
-            child: new Stack(
+            child: Stack(
               children: <Widget>[
-                new Container(
+                Container(
                   color: ColorUtils.colorFromHexString(photos[index].color),
-                  child: new FadeInImage.memoryNetwork(
+                  child: FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
                     image: photos[index].urls.regular,
                     fadeInDuration: Duration(milliseconds: 225),
                     fit: BoxFit.cover,
                   ),
                 ),
-                new Material(
+                Material(
                   type: MaterialType.transparency,
-                  child: new InkWell(
+                  child: InkWell(
                     splashColor: Colors.white10,
                     onTap: () {
                       Navigator.push(
                         context,
-                        new MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              new PhotoDetailPage(photo: photos[index]),
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => PhotoDetailPage(photo: photos[index]),
                         ),
                       );
                     },
